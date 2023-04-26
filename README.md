@@ -59,3 +59,6 @@ After having configured all of the above, subtitles should start updating at:
 ```
 http://address:3000/
 ```
+
+## Similar projects
+- [OBS-live-translation](https://github.com/eddieoz/OBS-live-translation), which was an inspiration for this project
