@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
-  "author": "",
-  "license": "ISC",
+  "author": "kongr45gpen",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
     "express-ws": "^5.0.2",
