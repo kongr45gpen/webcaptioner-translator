@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Translation</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'libs/notyf.min.css' %}">
+    <link rel="shortcut icon" href="{% static 'green.svg' %}"/>
+    <style>
+        .container {
+            height: 100vh;
+            width: 100vw;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .subtitle {
+            position: absolute;
+            bottom: 10vh;
+            left: 10vw;
+            width: 80vw;
+            background-color: black;
+            padding: 1vw;
+            color: white;
+            font-size: 3vw;
+            font-family: sans-serif;
+            min-height: 10vh;
+            font-weight: 500;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main id="container" class="container">
+    </main>
+
+    <div id="subtitle" class="subtitle">
+        THIS IS A TEST SUBTITLE
+    </div>
+
+    <script type="text/javascript">
+        function createSocket() {
+            let webSocket = new WebSocket(
+                'ws://' + window.location.host + '/ws/'
+            );
+
+            webSocket.onerror = function(e) {
+                console.error('Chat socket error', e);
+                setTimeout(() => {window.location.reload();}, 1000);
+            };
+            
+            webSocket.onclose = function(e) {
+                console.error('Chat socket closed unexpectedly', e);
+                setTimeout(() => {window.location.reload();}, 1000);
+            };
+
+            webSocket.onopen = function(e) {
+                document.getElementById('subtitle').innerHTML = '';
+            }
+
+            webSocket.onmessage = function(msg) {
+                msg = JSON.parse(msg.data);
+                document.getElementById('subtitle').innerText = msg['translation'];
+            }
+
+            return function() { return webSocket };
+        }
+
+        createSocket();
+    </script>
+</body>
+
+</html>
