@@ -10,6 +10,7 @@
   "author": "kongr45gpen",
   "license": "MIT",
   "dependencies": {
+    "colors": "^1.4.0",
     "deepl-node": "^1.9.0",
     "express": "^4.18.2",
     "express-ws": "^5.0.2",

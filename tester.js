@@ -34,8 +34,8 @@ const TRANSCRIPT = [
     "oh oh uhm i see hmmm yeah that uhhh that makes sense. Perfect, thank you for calling customer support. Bye"
 ]
 
-const WORD_SPLIT = 20;
-const DELAY_MS = 5000;
+const WORD_SPLIT = 4;
+const DELAY_MS = 1000;
 
 const transcript_words = TRANSCRIPT.join(' ').split(' ');
 
