@@ -10,13 +10,9 @@ import expressWs from 'express-ws'
 import http from 'http'
 import request from 'request'
 
-// ------------------------------------------------------------
-// CONFIGURATION
-// ------------------------------------------------------------
-let port = 3000;
-let deployment_id = "deployment_id_here";
+import config from './config.js'
 
-console.log("Starting server on port 3000...");
+console.log("Starting server on port " + config.port + "...");
 
 let app = express();
 let server = http.createServer(app).listen(port);    
@@ -26,21 +22,31 @@ let wsInstance = expressWs(app, server);
 app.use(express.static(__dirname + '/views'));
 app.use(express.text())
 
-let TRANS_URL = 'https://script.google.com/macros/s/' + deployment_id + '/exec?source=en&target=el';
 
 app.post('/hook', (req, res) => {
     const data = JSON.parse(req.body);
     console.debug("Received text: ", data);
 
-    const url = TRANS_URL + "&text=" + encodeURIComponent(data['transcript']);
-    request(url, (err, response, body) => {
-        if (err) { return console.log(err); }
-        console.log("Translated text: ", body);
+    if (config.translator == "googlescript") {
+        const TRANS_URL = 
+            'https://script.google.com/macros/s/' 
+            + config.googlescript.deployment_id 
+            + '/exec?source=' + config.language_from 
+            + '&target=' + config.language_to;
+        const url = TRANS_URL + "&text=" + encodeURIComponent(data['transcript']);
+        request(url, (err, response, body) => {
+            if (err) { return console.log(err); }
+            console.log("Translated text: ", body);
 
-        for (let client of wsInstance.getWss().clients) {
-            client.send(JSON.stringify({ "transcript": data['transcript'], "translation": body }));
-        };
-    });
+            for (let client of wsInstance.getWss().clients) {
+                client.send(JSON.stringify({ "transcript": data['transcript'], "translation": body }));
+            };
+        });
+    } else if (config.translator == "deepl") {
+        
+    } else {
+        console.error("Invalid translator: ", config.translator);
+    }
 
     res.status(200).send();
 });
