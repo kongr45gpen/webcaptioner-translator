@@ -12,4 +12,4 @@ config.googlescript.deployment_id = "deployment_id_here";
 
 config.deepl.key = "authentication_key_here";
 
-module.exports = config;
+export default config;
